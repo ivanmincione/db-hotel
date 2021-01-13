@@ -1,0 +1,10 @@
+● Seleziona tutti gli ospiti che sono stati identificati con la carta di
+identità
+
+SELECT * FROM `ospiti` 
+WHERE document_type = "CI";
+
+● Seleziona tutti gli ospiti che sono nati dopo il 1988
+
+SELECT * FROM `ospiti` 
+WHERE YEAR(date_of_birth) > "1988"
