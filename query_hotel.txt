@@ -146,7 +146,12 @@ HAVING prenotazioni.id = 7
 
 6● Le stanze sono state tutte prenotate almeno una volta? (Visualizzare le stanze non ancora prenotate)
 
-
+# da utilizzare LEFT JOIN per confrontare i record delle due tabelle,il risultato è NULL dala tab prenotazioni, se non c'è corrispondenza.  
+SELECT stanze.id, stanze.room_number, stanze.floor, stanze.beds
+FROM `stanze`
+LEFT JOIN `prenotazioni`
+ON `stanza_id` = `stanze`.`id`  
+WHERE `prenotazioni`.`id` IS NULL
 
 
 
