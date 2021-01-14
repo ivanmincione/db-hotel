@@ -93,20 +93,23 @@ ORDER BY tot_pren_effettuate DESC
 -------------------------------- JOIN ----------------------------------
 ● Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?
 
-SELECT ospiti.name, ospiti.lastname
-FROM `ospiti`
-JOIN prenotazioni_has_ospiti
-ON ospiti.id = prenotazioni_has_ospiti.ospite_id
-
-#da completare
+SELECT COUNT(`prenotazioni_has_ospiti`.`ospite_id`) AS `tot_prenotazioni`, `prenotazioni_has_ospiti`.`ospite_id`, `ospiti`.`name`, `ospiti`.`lastname`
+FROM `prenotazioni_has_ospiti`
+JOIN `ospiti`
+ON `prenotazioni_has_ospiti`.`ospite_id` = `ospiti`.`id`
+GROUP BY `prenotazioni_has_ospiti`.`ospite_id`
+HAVING COUNT(`ospite_id`) > 2;
 
 
 ● Stampare tutti gli ospiti per ogni prenotazione
 
-SELECT prenotazioni_has_ospiti.prenotazione_id, ospiti.name, ospiti.lastname, ospiti.date_of_birth
-FROM `ospiti`
-JOIN prenotazioni_has_ospiti
-ON ospiti.id = prenotazioni_has_ospiti.ospite_id
+SELECT `prenotazioni_has_ospiti`.`id`, `prenotazioni_has_ospiti`.`prenotazione_id`, `prenotazioni_has_ospiti`.`ospite_id`, `ospiti`.`name`, `ospiti`.`lastname` 
+FROM `prenotazioni_has_ospiti`
+JOIN `ospiti`
+ON `prenotazioni_has_ospiti`.`ospite_id` = `ospiti`.`id`
+
+
+● Stampare Nome, Cognome, Prezzo e Pagante per tutte le prenotazioni fatte a Maggio 2018
 
 
 
