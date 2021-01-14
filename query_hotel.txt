@@ -118,6 +118,35 @@ ON `pagamenti`.`pagante_id` = `paganti`.`id`
 HAVING `pagamenti`.`created_at` BETWEEN "2018-05-01" AND "2018-05-31"
 
 
+4● Fai la somma di tutti i prezzi delle prenotazioni per le stanze del
+primo piano
+
+SELECT SUM(`pagamenti`.`price`) AS "somma_prezzi",`stanze`.`floor`
+FROM `prenotazioni`
+JOIN `stanze`
+ON `stanze`.`id` = `prenotazioni`.`stanza_id` AND  `stanze`.`floor` = 1
+#relaziono la terza tabella per paragonare gli id
+JOIN `pagamenti`
+ON `pagamenti`.`prenotazione_id` = `prenotazioni`.`id`
+
+
+5● Prendi i dati di fatturazione per la prenotazione con id=7
+
+#tab da relazionare prenotazioni - stanze - pagamenti - paganti
+SELECT prenotazioni.id, prenotazioni.created_at AS "data_prenotazione", stanze.room_number, stanze.beds, pagamenti.price, paganti.name, paganti.lastname, paganti.address
+FROM prenotazioni
+JOIN stanze
+ON prenotazioni.stanza_id = stanze.id
+JOIN pagamenti
+ON prenotazioni.id = pagamenti.prenotazione_id
+JOIN paganti
+ON pagamenti.pagante_id = paganti.id
+HAVING prenotazioni.id = 7
+
+
+6● Le stanze sono state tutte prenotate almeno una volta? (Visualizzare le stanze non ancora prenotate)
+
+
 
 
 
