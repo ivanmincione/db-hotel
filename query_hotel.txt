@@ -15,6 +15,9 @@ dell’esecuzione della query)
 SELECT * FROM `ospiti` 
 WHERE (YEAR(CURRENT_DATE) - YEAR(date_of_birth)) > 20;
 
+oppure per essere precisi
+TIMESTAMPDIFF(YEAR, date_of_birth, CURRENT_DATE) > 20;
+
 4● Seleziona tutti gli ospiti il cui nome inizia con la D
 
 SELECT * FROM `ospiti`
@@ -30,6 +33,7 @@ WHERE status = "accepted";
 
 SELECT `price` 
 FROM `pagamenti` 
+WHERE status = "accepted"
 ORDER BY `price` DESC LIMIT 1;
 
 7● Seleziona gli ospiti riconosciuti con patente e nati nel 1975
@@ -47,6 +51,62 @@ WHERE ospite_id IS NOT NULL;
 
 SELECT SUM(beds)
 FROM `stanze`;
+
+
+-------------------------------- GROUP BY ----------------------------------
+
+1.1● Conta gli ospiti raggruppandoli per anno di nascita
+
+SELECT COUNT(id), YEAR(date_of_birth) AS anno_ricorrente
+FROM `ospiti`
+GROUP BY YEAR(date_of_birth)
+
+1.2● Somma i prezzi dei pagamenti raggruppandoli per status
+
+SELECT (status), SUM(price) AS somma_prezzi
+FROM `pagamenti`
+GROUP BY status
+
+1.3● Conta quante volte è stata prenotata ogni stanza
+
+SELECT COUNT(*) AS numero_di_prenotazioni, stanza_id
+FROM `prenotazioni`
+GROUP BY stanza_id
+
+1.4● Fai una analisi per vedere se ci sono ore in cui le prenotazioni sono
+più frequenti
+
+SELECT COUNT(id) AS tot_ricorrenze, CONCAT(HOUR(created_at), ':00' ) AS ora_ricorrente
+FROM `prenotazioni`
+GROUP BY CONCAT(HOUR(created_at), ':00' )
+ORDER BY COUNT(id) ASC
+
+1.5● Quante prenotazioni ha fatto l’ospite che ha fatto più prenotazioni?
+
+SELECT COUNT(*) AS tot_pren_effettuate, ospite_id 
+FROM `prenotazioni_has_ospiti`
+GROUP BY ospite_id
+ORDER BY tot_pren_effettuate DESC
+#LIMIT 1
+
+
+-------------------------------- JOIN ----------------------------------
+● Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?
+
+SELECT ospiti.name, ospiti.lastname
+FROM `ospiti`
+JOIN prenotazioni_has_ospiti
+ON ospiti.id = prenotazioni_has_ospiti.ospite_id
+
+#da completare
+
+
+● Stampare tutti gli ospiti per ogni prenotazione
+
+SELECT prenotazioni_has_ospiti.prenotazione_id, ospiti.name, ospiti.lastname, ospiti.date_of_birth
+FROM `ospiti`
+JOIN prenotazioni_has_ospiti
+ON ospiti.id = prenotazioni_has_ospiti.ospite_id
 
 
 
